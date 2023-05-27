@@ -7,12 +7,13 @@ import android.content.pm.PackageManager
 import android.location.Location
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.chocofac.charlie.data.model.Param
 import jp.chocofac.charlie.data.model.PostData
 import jp.chocofac.charlie.data.model.toGeoPoint
+import jp.chocofac.charlie.data.model.toLatLng
 import jp.chocofac.charlie.data.service.location.FireStoreRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -50,7 +51,6 @@ class HomeViewModel @Inject constructor(
         } else {
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                 _nowLocationState.value = NowLocationState(location = it)
-                Timber.d("lat: ${it.latitude}, lng: ${it.longitude}")
             }
         }
     }
@@ -69,6 +69,10 @@ class HomeViewModel @Inject constructor(
     
     fun onDismissRequest() {
         _uiState.value = _uiState.value.copy(error = null)
+    }
+
+    fun nowLocation(): LatLng {
+        return _nowLocationState.value.location.toLatLng()
     }
 
     fun postData(text: String = "") {
