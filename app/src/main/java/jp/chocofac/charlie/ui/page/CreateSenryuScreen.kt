@@ -41,7 +41,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import jp.chocofac.charlie.ui.viewmodel.CreateSenryuViewModel
 import jp.chocofac.charlie.ui.viewmodel.SenryuViewState
-import timber.log.Timber
 
 @Composable
 fun CreateSenryuScreen(

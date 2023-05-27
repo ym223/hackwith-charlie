@@ -9,7 +9,6 @@ import dagger.hilt.components.SingletonComponent
 import jp.chocofac.charlie.data.model.Param.Companion.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
