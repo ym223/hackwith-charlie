@@ -1,5 +1,6 @@
 package jp.chocofac.charlie.data.service.senryu
 
+import android.os.Parcelable
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -7,6 +8,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import jp.chocofac.charlie.data.model.Param.Companion.BASE_URL
+import kotlinx.parcelize.Parcelize
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -27,11 +29,12 @@ interface SenryuService {
     ): Response<Senryu>
 }
 
+@Parcelize
 data class Senryu(
     val first: String,
     val second: String,
     val last: String
-)
+) : Parcelable
 
 data class Impressions(
     val impressions: String

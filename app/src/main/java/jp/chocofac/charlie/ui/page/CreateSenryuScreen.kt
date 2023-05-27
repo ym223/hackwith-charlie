@@ -18,9 +18,13 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
@@ -39,6 +44,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import jp.chocofac.charlie.LocalNavController
+import jp.chocofac.charlie.NavItem
+import jp.chocofac.charlie.R
+import jp.chocofac.charlie.data.service.senryu.Senryu
 import jp.chocofac.charlie.ui.viewmodel.CreateSenryuViewModel
 import jp.chocofac.charlie.ui.viewmodel.SenryuViewState
 
@@ -46,56 +55,82 @@ import jp.chocofac.charlie.ui.viewmodel.SenryuViewState
 fun CreateSenryuScreen(
     senryuViewModel: CreateSenryuViewModel = hiltViewModel()
 ) {
+    val navController = LocalNavController.current
+
     CreateSenryuContent(
-        senryuViewModel
-    )
+        viewModel = senryuViewModel
+    ) { navController.navigate("${NavItem.PostScreen.name}/${it.first}/${it.second}/${it.last}") }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateSenryuContent(
-    viewModel: CreateSenryuViewModel
+    viewModel: CreateSenryuViewModel,
+    onSubmitButtonClick: (Senryu) -> Unit
 ) {
     val state = viewModel.senryuViewState.collectAsState()
     var text by remember {
         mutableStateOf("")
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        CameraPreview()
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "思ったことを書くのじゃ")
-        Spacer(modifier = Modifier.height(16.dp))
-        SenryuTextField(
-            value = text,
-            onValueChange = {
-                text = it
-            }
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { viewModel.postImpressions(text) }) {
-            Text(text = "川柳を詠むのじゃ")
-        }
-        when (state.value) {
-            SenryuViewState.Initial -> {
-            }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(stringResource(id = R.string.app_name))
+                },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+        }) { paddingValues ->
+        Surface(modifier = Modifier.padding(paddingValues)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                CameraPreview()
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "思ったことを書くのじゃ")
+                Spacer(modifier = Modifier.height(16.dp))
+                SenryuTextField(
+                    value = text,
+                    onValueChange = {
+                        text = it
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = { viewModel.postImpressions(text) }) {
+                    Text(text = "川柳を詠むのじゃ")
+                }
+                when (state.value) {
+                    SenryuViewState.Initial -> {
+                    }
 
-            is SenryuViewState.Error -> {
-                Text(text = "Error")
-            }
+                    is SenryuViewState.Error -> {
+                        Text(text = "Error")
+                    }
 
-            SenryuViewState.Loading -> {
-                Text(text = "Loading")
-            }
+                    SenryuViewState.Loading -> {
+                        Text(text = "Loading")
+                    }
 
-            is SenryuViewState.Success -> {
-                // 取得した川柳を表示 (画面遷移?)
-                Text(text = state.value.toString())
+                    is SenryuViewState.Success -> {
+                        // 取得した川柳を表示 (画面遷移?)
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(text = state.value.toString())
+                            Button(onClick = { onSubmitButtonClick(state.value.require()) }) {
+                                Text(text = "投稿するのじゃ！")
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -177,4 +212,9 @@ fun SenryuTextField(
             }
         }
     )
+}
+
+private fun SenryuViewState.require(): Senryu {
+    if (this !is SenryuViewState.Success) throw java.lang.IllegalStateException("no senryu")
+    return senryu
 }
