@@ -23,8 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -117,7 +119,11 @@ fun LoginContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(stringResource(id = R.string.login_welcome_message))
+            Text(
+                stringResource(id = R.string.login_welcome_message),
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp
+            )
 
             Spacer(modifier = Modifier.padding(16.dp))
 
