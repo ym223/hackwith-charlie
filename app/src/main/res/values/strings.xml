@@ -5,6 +5,12 @@
     <string name="login_welcome_message">Welcome to Charlie!</string>
     <string name="login_sign_in_button_label">Sign In</string>
 
+    <!-- HomeScreen -->
+    <string name="home_navigation_label">Home</string>
+
+    <!-- RankingScreen -->
+    <string name="ranking_navigation_label">Ranking</string>
+
     <!-- Util -->
     <string name="sign_out_button_label">Sign Out</string>
 </resources>
