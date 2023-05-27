@@ -29,6 +29,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import jp.chocofac.charlie.ui.page.CreateSenryuScreen
 import jp.chocofac.charlie.ui.page.HomeScreen
 import jp.chocofac.charlie.ui.page.LoginScreen
 import jp.chocofac.charlie.ui.page.RankingScreen
@@ -68,6 +69,9 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(NavItem.RankingScreen.name) {
                                 RankingScreen()
+                            }
+                            composable(NavItem.SenryuScreen.name) {
+                                CreateSenryuScreen()
                             }
                         }
                     }

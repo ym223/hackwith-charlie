@@ -7,4 +7,5 @@ sealed class NavItem(
     object LoginScreen: NavItem("login")
     object HomeScreen : NavItem("home")
     object RankingScreen: NavItem("ranking")
+    object SenryuScreen : NavItem("senryu")
 }

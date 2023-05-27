@@ -3,10 +3,13 @@ package jp.chocofac.charlie.ui.page
 import android.location.Location
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -60,6 +63,9 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 }
             }
         },
+        onAddButtonClick = {
+            navController.navigate(NavItem.SenryuScreen.name)
+        },
         locationState.location
     )
 }
@@ -68,6 +74,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 @Composable
 fun HomeContent(
     onSignOutButtonClick: () -> Unit = {},
+    onAddButtonClick: () -> Unit = {},
     location: Location = Location("")
 ) {
     Scaffold(
@@ -84,13 +91,16 @@ fun HomeContent(
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
-        }
+        },
+        floatingActionButton = { AddSenryuButton(onAddButtonClick) }
     ) { paddingValues ->
         val cameraPosition =
             CameraPosition.fromLatLngZoom(location.toLatLng(), 18f)
         val cameraPositionState = CameraPositionState(cameraPosition)
         GoogleMap(
-            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
             cameraPositionState = cameraPositionState,
             properties = MapProperties(isMyLocationEnabled = true),
             // FABに被るので、一旦ZoomControlsを消してる
@@ -114,6 +124,17 @@ fun SignOutButton(
         ),
     ) {
         Text(stringResource(id = R.string.sign_out_button_label))
+    }
+}
+
+@Composable
+fun AddSenryuButton(
+    onAddButtonClick: () -> Unit
+) {
+    FloatingActionButton(
+        onClick = { onAddButtonClick() },
+    ) {
+        Icon(Icons.Filled.Add, "Localized description")
     }
 }
 
