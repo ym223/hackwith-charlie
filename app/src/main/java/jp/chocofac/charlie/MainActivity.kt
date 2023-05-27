@@ -33,6 +33,7 @@ import jp.chocofac.charlie.ui.page.HomeScreen
 import jp.chocofac.charlie.ui.page.LoginScreen
 import jp.chocofac.charlie.ui.page.RankingScreen
 import jp.chocofac.charlie.ui.theme.CharlieTheme
+import timber.log.Timber
 
 val LocalNavController = staticCompositionLocalOf<NavHostController> {
     error("No Current NavController")
@@ -95,20 +96,26 @@ fun CharlieBottomNavigation(items: List<BottomNavigationItem> = defaultNavigatio
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    val homeOrHistory = currentDestination?.hierarchy?.any {
+    val homeOrRanking = currentDestination?.hierarchy?.any {
         it.route == NavItem.HomeScreen.name || it.route == NavItem.RankingScreen.name
     }
 
-    if (homeOrHistory == true) {
+    if (homeOrRanking == true) {
         NavigationBar {
             items.forEach { item ->
+                val selected = currentDestination.hierarchy.any { it.route == item.route }
                 NavigationBarItem(
                     icon = {
                         Icon(item.icon, contentDescription = item.route)
                     },
-                    selected = currentDestination.hierarchy.any { it.route == item.route },
+                    selected = selected,
+                    enabled = !selected,
                     onClick = {
-                        navController.navigate(item.route)
+                        navController.navigate(item.route) {
+                            popUpTo(NavItem.LoginScreen.name) {
+                                inclusive = true
+                            }
+                        }
                     },
                     label = {
                         Text(stringResource(id = item.resourceId))
