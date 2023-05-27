@@ -8,6 +8,10 @@ fun Location.toLatLng(): LatLng {
     return LatLng(this.latitude, this.longitude)
 }
 
+fun Location.toGeoPoint(): GeoPoint {
+    return GeoPoint(this.latitude, this.longitude)
+}
+
 fun GeoPoint.toLatLng(): LatLng {
     return LatLng(this.latitude, this.longitude)
 }
