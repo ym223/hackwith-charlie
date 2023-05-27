@@ -16,12 +16,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
+import jp.chocofac.charlie.ui.page.HomeScreen
 import jp.chocofac.charlie.ui.theme.CharlieTheme
 
 val LocalNavController = staticCompositionLocalOf<NavHostController> {
     error("No Current NavController")
 }
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +40,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = NavItem.HomeScreen.name
                     ) {
                         composable(NavItem.HomeScreen.name) {
-
+                            HomeScreen()
                         }
                     }
                 }
