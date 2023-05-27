@@ -80,11 +80,13 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         Text("OK")
                     }
                 }
-            }
+            )
         }
+
         uiState.loading -> {
             LoadingCircle()
         }
+
         else -> {
             HomeContent(
                 dataList = uiState.data,
@@ -96,6 +98,9 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             inclusive = true
                         }
                     }
+                },
+                onAddButtonClick = {
+                    navController.navigate(NavItem.SenryuScreen.name)
                 }
             )
         }
