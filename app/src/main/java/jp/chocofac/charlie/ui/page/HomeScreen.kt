@@ -3,7 +3,7 @@ package jp.chocofac.charlie.ui.page
 import android.location.Location
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,11 +17,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -30,12 +32,17 @@ import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 import jp.chocofac.charlie.LocalNavController
 import jp.chocofac.charlie.NavItem
 import jp.chocofac.charlie.R
+import jp.chocofac.charlie.data.model.PostData
 import jp.chocofac.charlie.data.model.toLatLng
+import jp.chocofac.charlie.ui.component.LoadingCircle
 import jp.chocofac.charlie.ui.theme.CharlieTheme
 import jp.chocofac.charlie.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
@@ -49,27 +56,56 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     }
 
     val locationState by viewModel.nowLocationState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     viewModel.startFetch(context)
 
-    HomeContent(
-        onSignOutButtonClick = {
-            FirebaseAuth.getInstance().signOut()
-            navController.navigate(NavItem.LoginScreen.name) {
-                popUpTo(navController.graph.id) {
-                    inclusive = true
+    when {
+        uiState.error != null -> {
+            AlertDialog(
+                onDismissRequest = {
+                    viewModel.onDismissRequest()
+                },
+                title = {
+                    Text("${uiState.error!!.cause}")
+                },
+                text = {
+                    Text("${uiState.error!!.message}")
+                },
+                confirmButton = {
+                    Button(onClick = { viewModel.onDismissRequest() }) {
+                        Text("OK")
+                    }
                 }
-            }
-        },
-        locationState.location
-    )
+            )
+        }
+        uiState.loading -> {
+            LoadingCircle()
+        }
+        else -> {
+            HomeContent(
+                dataList = uiState.data,
+                location = locationState.location,
+                onSignOutButtonClick = {
+                    FirebaseAuth.getInstance().signOut()
+                    navController.navigate(NavItem.LoginScreen.name) {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeContent(
+    dataList: List<PostData> = emptyList(),
+    location: Location = Location(""),
     onSignOutButtonClick: () -> Unit = {},
-    location: Location = Location("")
 ) {
+    val scope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -89,14 +125,36 @@ fun HomeContent(
         val cameraPosition =
             CameraPosition.fromLatLngZoom(location.toLatLng(), 18f)
         val cameraPositionState = CameraPositionState(cameraPosition)
+
         GoogleMap(
-            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
             cameraPositionState = cameraPositionState,
             properties = MapProperties(isMyLocationEnabled = true),
             // FABに被るので、一旦ZoomControlsを消してる
             // TODO: ZoomControlsをどうするか検討
             uiSettings = MapUiSettings(zoomControlsEnabled = false),
-        )
+        ) {
+            dataList.forEach { data ->
+                Marker(
+                    state = MarkerState(
+                        data.geoPoint.toLatLng()
+                    ),
+                    onClick = {
+                        scope.launch {
+                            cameraPositionState.animate(
+                                update = CameraUpdateFactory.newCameraPosition(
+                                    CameraPosition(data.geoPoint.toLatLng(), 18f, 0f, 0f)
+                                ),
+                                durationMs = 1000
+                            )
+                        }
+                        true
+                    }
+                )
+            }
+        }
     }
 }
 
