@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import jp.chocofac.charlie.ui.page.HomeScreen
+import jp.chocofac.charlie.ui.page.LoginScreen
 import jp.chocofac.charlie.ui.theme.CharlieTheme
 
 val LocalNavController = staticCompositionLocalOf<NavHostController> {
@@ -37,8 +38,11 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NavHost(
                         navController = navController,
-                        startDestination = NavItem.HomeScreen.name
+                        startDestination = NavItem.LoginScreen.name
                     ) {
+                        composable(NavItem.LoginScreen.name) {
+                            LoginScreen()
+                        }
                         composable(NavItem.HomeScreen.name) {
                             HomeScreen()
                         }
