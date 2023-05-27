@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,10 +49,10 @@ fun CreateSenryuContent() {
         mutableStateOf("")
     }
     Column(
+        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
         CameraPreview()
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "思ったことを書くのじゃ")
@@ -76,9 +78,7 @@ fun CameraPreview() {
     })
     Surface(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .height(128.dp),
+            .aspectRatio(16f/9f),
         border = BorderStroke(
             width = 1.dp,
             color = MaterialTheme.colorScheme.surfaceTint
@@ -138,7 +138,7 @@ fun SenryuTextField(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .height(112.dp)
                     .padding(horizontal = 36.dp),
                 border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.surfaceTint)
             ) {
