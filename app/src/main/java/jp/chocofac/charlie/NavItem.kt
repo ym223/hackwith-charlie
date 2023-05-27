@@ -4,5 +4,6 @@ package jp.chocofac.charlie
 sealed class NavItem(
     val name: String
 ) {
+    object LoginScreen: NavItem("login")
     object HomeScreen : NavItem("home")
 }

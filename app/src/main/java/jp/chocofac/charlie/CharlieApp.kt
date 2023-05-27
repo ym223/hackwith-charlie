@@ -1,6 +1,7 @@
 package jp.chocofac.charlie
 
 import android.app.Application
+import android.os.Debug
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 

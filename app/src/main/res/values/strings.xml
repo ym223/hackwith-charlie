@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">charlie</string>
+
+    <!-- LoginScreen -->
+    <string name="login_welcome_message">Welcome to Charlie!</string>
+    <string name="login_sign_in_button_label">Sign In</string>
+
+    <!-- Util -->
+    <string name="sign_out_button_label">Sign Out</string>
 </resources>

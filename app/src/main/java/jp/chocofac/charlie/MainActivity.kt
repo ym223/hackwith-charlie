@@ -3,21 +3,15 @@ package jp.chocofac.charlie
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import jp.chocofac.charlie.ui.page.HomeScreen
+import jp.chocofac.charlie.ui.page.LoginScreen
 import jp.chocofac.charlie.ui.theme.CharlieTheme
 
 val LocalNavController = staticCompositionLocalOf<NavHostController> {
@@ -37,8 +31,11 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NavHost(
                         navController = navController,
-                        startDestination = NavItem.HomeScreen.name
+                        startDestination = NavItem.LoginScreen.name
                     ) {
+                        composable(NavItem.LoginScreen.name) {
+                            LoginScreen()
+                        }
                         composable(NavItem.HomeScreen.name) {
                             HomeScreen()
                         }
