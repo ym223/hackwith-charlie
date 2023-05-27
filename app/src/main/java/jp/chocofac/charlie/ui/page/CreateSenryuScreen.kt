@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,21 +36,35 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import jp.chocofac.charlie.ui.viewmodel.CreateSenryuViewModel
+import jp.chocofac.charlie.ui.viewmodel.SenryuViewState
+import timber.log.Timber
 
 @Composable
-fun CreateSenryuScreen() {
-    CreateSenryuContent()
+fun CreateSenryuScreen(
+    senryuViewModel: CreateSenryuViewModel = hiltViewModel()
+) {
+    CreateSenryuContent(
+        senryuViewModel
+    )
 }
 
 @Composable
-fun CreateSenryuContent() {
+fun CreateSenryuContent(
+    viewModel: CreateSenryuViewModel
+) {
+    val state = viewModel.senryuViewState.collectAsState()
     var text by remember {
         mutableStateOf("")
     }
+
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -64,8 +79,25 @@ fun CreateSenryuContent() {
             }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = { viewModel.postImpressions(text) }) {
             Text(text = "川柳を詠むのじゃ")
+        }
+        when (state.value) {
+            SenryuViewState.Initial -> {
+            }
+
+            is SenryuViewState.Error -> {
+                Text(text = "Error")
+            }
+
+            SenryuViewState.Loading -> {
+                Text(text = "Loading")
+            }
+
+            is SenryuViewState.Success -> {
+                // 取得した川柳を表示 (画面遷移?)
+                Text(text = state.value.toString())
+            }
         }
     }
 }
@@ -78,7 +110,7 @@ fun CameraPreview() {
     })
     Surface(
         modifier = Modifier
-            .aspectRatio(16f/9f),
+            .aspectRatio(16f / 9f),
         border = BorderStroke(
             width = 1.dp,
             color = MaterialTheme.colorScheme.surfaceTint
