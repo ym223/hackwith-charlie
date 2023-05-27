@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">charlie</string>
+    <string name="app_name">たくぼく</string>
 
     <!-- LoginScreen -->
     <string name="login_welcome_message">Welcome to Charlie!</string>
