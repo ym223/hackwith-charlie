@@ -1,6 +1,5 @@
 package jp.chocofac.charlie.ui.page
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,6 +34,7 @@ import jp.chocofac.charlie.LocalNavController
 import jp.chocofac.charlie.NavItem
 import jp.chocofac.charlie.R
 import jp.chocofac.charlie.data.service.rememberFirebaseAuthLauncher
+import jp.chocofac.charlie.ui.theme.CharlieTheme
 import jp.chocofac.charlie.ui.viewmodel.LoginViewModel
 import timber.log.Timber
 
@@ -92,7 +93,6 @@ fun LoginScreen(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = false)
 @Composable
 fun LoginContent(
     onLoginButtonClick: () -> Unit = {}
@@ -103,7 +103,10 @@ fun LoginContent(
                 title = {
                     Text(text = stringResource(id = R.string.app_name))
                 },
-                Modifier.background(MaterialTheme.colorScheme.primary)
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
+                )
             )
         }
     ) { paddingValues ->
@@ -114,15 +117,23 @@ fun LoginContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Welcome")
+            Text(stringResource(id = R.string.login_welcome_message))
 
             Spacer(modifier = Modifier.padding(16.dp))
 
             Button(
                 onClick = onLoginButtonClick
             ) {
-                Text("Sign In")
+                Text(stringResource(id = R.string.login_sign_in_button_label))
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginPreview() {
+    CharlieTheme {
+        LoginContent()
     }
 }
