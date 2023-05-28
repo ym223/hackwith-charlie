@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -27,6 +29,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -112,9 +115,11 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 }
             )
         }
+
         uiState.loading -> {
             LoadingCircle()
         }
+
         else -> {
             HomeContent(
                 dataList = uiState.data,
@@ -125,6 +130,9 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                             inclusive = true
                         }
                     }
+                },
+                onAddButtonClick = {
+                    navController.navigate(NavItem.SenryuScreen.name)
                 }
             )
         }
@@ -135,7 +143,9 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 @Composable
 fun HomeContent(
     dataList: List<PostData> = emptyList(),
-    onSignOutButtonClick: () -> Unit,
+    cameraPositionState: CameraPositionState = CameraPositionState(),
+    onSignOutButtonClick: () -> Unit = {},
+    onAddButtonClick: () -> Unit = {},
 ) {
     Timber.d("Content: Recompose")
     val scope = rememberCoroutineScope()
@@ -157,7 +167,8 @@ fun HomeContent(
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
-        }
+        },
+        floatingActionButton = { AddSenryuButton(onAddButtonClick) }
     ) { paddingValues ->
         val postData = remember {
             mutableStateOf(PostData())
@@ -234,6 +245,17 @@ fun SignOutButton(
         ),
     ) {
         Text(stringResource(id = R.string.sign_out_button_label))
+    }
+}
+
+@Composable
+fun AddSenryuButton(
+    onAddButtonClick: () -> Unit
+) {
+    FloatingActionButton(
+        onClick = { onAddButtonClick() },
+    ) {
+        Icon(Icons.Filled.Add, "Localized description")
     }
 }
 
