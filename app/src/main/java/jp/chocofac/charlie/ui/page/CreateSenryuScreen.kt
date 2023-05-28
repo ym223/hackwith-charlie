@@ -68,6 +68,8 @@ fun CreateSenryuScreen(
     senryuViewModel: CreateSenryuViewModel = hiltViewModel(),
 ) {
     val navController = LocalNavController.current
+    val context = LocalContext.current
+    senryuViewModel.nowLocation(context = context)
 
     CreateSenryuContent(
         viewModel = senryuViewModel

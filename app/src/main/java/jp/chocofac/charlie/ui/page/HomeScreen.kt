@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
@@ -345,7 +344,6 @@ fun DetailPopup(
                     Spacer(modifier = Modifier.padding(6.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         var likeCount by remember {
@@ -366,6 +364,7 @@ fun DetailPopup(
                             likeCount = likeCount,
                             like = like
                         )
+                        Spacer(modifier = Modifier.padding(8.dp))
                         Text(
                             text = data.contributor,
                             fontWeight = FontWeight.Bold,
