@@ -72,6 +72,7 @@ import jp.chocofac.charlie.R
 import jp.chocofac.charlie.data.model.PostData
 import jp.chocofac.charlie.data.model.toLatLng
 import jp.chocofac.charlie.ui.component.LoadingCircle
+import jp.chocofac.charlie.ui.fontFamily
 import jp.chocofac.charlie.ui.theme.CharlieTheme
 import jp.chocofac.charlie.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
@@ -152,7 +153,7 @@ fun HomeContent(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(stringResource(id = R.string.app_name))
+                    Text(stringResource(id = R.string.app_name), fontFamily = fontFamily)
                 },
                 actions = {
                     SignOutButton(onSignOutButtonClick)
