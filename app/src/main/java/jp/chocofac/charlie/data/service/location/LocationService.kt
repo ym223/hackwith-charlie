@@ -19,4 +19,10 @@ class LocationService {
     fun provideLocationProvider(@ApplicationContext appContext: Context): FusedLocationProviderClient {
         return LocationServices.getFusedLocationProviderClient(appContext)
     }
+
+    @Singleton
+    @Provides
+    fun provideLocationRepositoryProvider(fusedLocationProviderClient: FusedLocationProviderClient): LocationRepository {
+        return LocationRepository(fusedLocationProviderClient)
+    }
 }
