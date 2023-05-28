@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.chocofac.charlie.R
+import jp.chocofac.charlie.ui.fontFamily
 import jp.chocofac.charlie.ui.theme.CharlieTheme
 
 data class Senryu(val firstLine: String, val secondLine: String, val thirdLine: String) {
@@ -135,7 +136,8 @@ fun SenryuListItem(name: Senryu) {
                 text = name.firstLine,
                 textAlign = TextAlign.Start,
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
+                fontSize = 24.sp,
+                fontFamily = fontFamily
             )
             Text(
                 modifier = Modifier
@@ -147,7 +149,8 @@ fun SenryuListItem(name: Senryu) {
                 text = name.secondLine,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
+                fontSize = 24.sp,
+                fontFamily = fontFamily
             )
             Text(
                 modifier = Modifier
@@ -161,7 +164,8 @@ fun SenryuListItem(name: Senryu) {
                 text = name.thirdLine,
                 textAlign = TextAlign.End,
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
+                fontSize = 24.sp,
+                fontFamily = fontFamily
             )
             Row {
                 val onClick by mutableStateOf({})
@@ -210,7 +214,8 @@ fun SenryuListItem(name: Senryu) {
                             bottom = 0.dp
                         ),
                     text = "ゆめ",
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
+                    fontFamily = fontFamily
                 )
             }
         }
