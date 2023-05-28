@@ -2,7 +2,7 @@
     <string name="app_name">たくぼく</string>
 
     <!-- LoginScreen -->
-    <string name="login_welcome_message">Welcome to Charlie!</string>
+    <string name="login_welcome_message">ようこそ、たくぼくへ！</string>
     <string name="login_sign_in_button_label">Sign In</string>
 
     <!-- HomeScreen -->

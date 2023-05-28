@@ -313,6 +313,7 @@ fun DetailPopup(
                             text = data.first,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleLarge,
+                            fontFamily = fontFamily,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier
@@ -323,6 +324,7 @@ fun DetailPopup(
                             text = data.second,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleLarge,
+                            fontFamily = fontFamily,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -331,6 +333,7 @@ fun DetailPopup(
                             text = data.third,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleLarge,
+                            fontFamily = fontFamily,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier
@@ -363,9 +366,10 @@ fun DetailPopup(
                         )
                         Spacer(modifier = Modifier.padding(8.dp))
                         Text(
-                            text = data.contributor,
+                            text = "歌人: ${data.contributor}",
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleMedium,
+                            fontFamily = fontFamily,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier
