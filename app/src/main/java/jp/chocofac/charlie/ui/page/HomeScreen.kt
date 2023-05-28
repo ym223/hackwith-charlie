@@ -81,6 +81,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         navController.navigate(NavItem.LoginScreen.name)
     }
     val uiState by viewModel.uiState.collectAsState()
+    val locationState by viewModel.nowLocationState.collectAsState()
     viewModel.startFetch(context)
 
     when {
@@ -109,7 +110,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
         else -> {
             val cameraPosition =
-                CameraPosition.fromLatLngZoom(viewModel.nowLocation(), 18f)
+                CameraPosition.fromLatLngZoom(locationState.location.toLatLng(), 18f)
             val cameraPositionState = CameraPositionState(cameraPosition)
 
             HomeContent(
