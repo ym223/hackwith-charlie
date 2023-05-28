@@ -20,9 +20,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -172,7 +172,7 @@ fun LoadingView() {
     Dialog(onDismissRequest = { /*TODO*/ }) {
         Surface(
             modifier = Modifier.size(240.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(24.dp)
             ) {
             AsyncImage(
                 model = imageRequest,
@@ -214,7 +214,7 @@ fun CameraPreview() {
                 // カメラのプレビュー?
                 Text("Preview Image")
             } else {
-                Button(onClick = { multiplePermissionsState.launchMultiplePermissionRequest() }) {
+                OutlinedButton(onClick = { multiplePermissionsState.launchMultiplePermissionRequest() }) {
                     Text("Request permissions")
                 }
             }
