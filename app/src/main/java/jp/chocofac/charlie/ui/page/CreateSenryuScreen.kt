@@ -1,6 +1,7 @@
 package jp.chocofac.charlie.ui.page
 
 import android.Manifest
+import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,11 +14,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -36,12 +39,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import coil.request.ImageRequest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import jp.chocofac.charlie.LocalNavController
@@ -90,57 +101,94 @@ fun CreateSenryuContent(
             )
         }) { paddingValues ->
         Surface(modifier = Modifier.padding(paddingValues)) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+            Box(
+                contentAlignment = Alignment.Center
             ) {
-                CameraPreview()
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "思ったことを書くのじゃ", fontFamily = fontFamily)
-                Spacer(modifier = Modifier.height(16.dp))
-                SenryuTextField(
-                    value = text,
-                    onValueChange = {
-                        text = it
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    CameraPreview()
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = "思ったことを書くのじゃ", fontFamily = fontFamily)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    SenryuTextField(
+                        value = text,
+                        onValueChange = {
+                            text = it
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(onClick = { viewModel.postImpressions(text) }) {
+                        Text(text = "川柳を詠むのじゃ", fontFamily = fontFamily)
                     }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { viewModel.postImpressions(text) }) {
-                    Text(text = "川柳を詠むのじゃ", fontFamily = fontFamily)
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                when (state.value) {
-                    SenryuViewState.Initial -> {
-                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    when (state.value) {
+                        SenryuViewState.Initial -> {
+                        }
 
-                    is SenryuViewState.Error -> {
-                        Text(text = "Error")
-                    }
+                        is SenryuViewState.Error -> {
+                            Text(text = "Error")
+                        }
 
-                    SenryuViewState.Loading -> {
-                        Text(text = "Loading")
-                    }
+                        SenryuViewState.Loading -> {
+                            Text(text = "Loading")
+                        }
 
-                    is SenryuViewState.Success -> {
-                        // 取得した川柳を表示 (画面遷移?)
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            val first = state.value.require().first
-                            val second = state.value.require().second
-                            val last = state.value.require().last
-                            Text(text = "$first\n$second\n$last", fontFamily = fontFamily)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Button(onClick = { onSubmitButtonClick(state.value.require()) }) {
-                                Text(text = "投稿するのじゃ！", fontFamily = fontFamily)
+                        is SenryuViewState.Success -> {
+                            // 取得した川柳を表示 (画面遷移?)
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                val first = state.value.require().first
+                                val second = state.value.require().second
+                                val last = state.value.require().last
+                                Text(text = "$first\n$second\n$last", fontFamily = fontFamily)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Button(onClick = { onSubmitButtonClick(state.value.require()) }) {
+                                    Text(text = "投稿するのじゃ！", fontFamily = fontFamily)
+                                }
                             }
                         }
                     }
                 }
+                if (state.value == SenryuViewState.Loading) {
+                    LoadingView()
+                }
             }
+        }
+    }
+}
+
+@Composable
+fun LoadingView() {
+    val imageRequest = ImageRequest.Builder(LocalContext.current)
+        .data(R.raw.takuboku)
+        .build()
+
+    Dialog(onDismissRequest = { /*TODO*/ }) {
+        Surface(
+            modifier = Modifier.size(240.dp),
+            shape = RoundedCornerShape(16.dp)
+            ) {
+            AsyncImage(
+                model = imageRequest,
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier.fillMaxWidth(),
+                imageLoader = ImageLoader.Builder(context = LocalContext.current)
+                    .components {
+                        if (SDK_INT >= 28) {
+                            add(ImageDecoderDecoder.Factory())
+                        } else {
+                            add(GifDecoder.Factory())
+                        }
+                    }
+                    .build()
+            )
         }
     }
 }
