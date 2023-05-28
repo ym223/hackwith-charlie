@@ -341,7 +341,6 @@ fun DetailPopup(
                     Spacer(modifier = Modifier.padding(6.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         var likeCount by remember {
@@ -362,6 +361,7 @@ fun DetailPopup(
                             likeCount = likeCount,
                             like = like
                         )
+                        Spacer(modifier = Modifier.padding(8.dp))
                         Text(
                             text = data.contributor,
                             fontWeight = FontWeight.Bold,
