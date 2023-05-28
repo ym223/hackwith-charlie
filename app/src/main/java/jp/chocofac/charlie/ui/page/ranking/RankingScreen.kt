@@ -261,7 +261,7 @@ fun TabScreen() {
             1 -> FunRankingScreen()
             2 -> MtHakodateRankingScreen()
             3 -> GourmetRankingScreen()
-            4 -> RankingContent()
+            4 -> HistoryRankingScreen()
             5 -> RankingContent()
         }
     }
