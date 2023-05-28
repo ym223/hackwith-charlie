@@ -50,13 +50,11 @@ import jp.chocofac.charlie.R
 import jp.chocofac.charlie.data.service.senryu.Senryu
 import jp.chocofac.charlie.ui.fontFamily
 import jp.chocofac.charlie.ui.viewmodel.CreateSenryuViewModel
-import jp.chocofac.charlie.ui.viewmodel.HomeViewModel
 import jp.chocofac.charlie.ui.viewmodel.SenryuViewState
 
 @Composable
 fun CreateSenryuScreen(
     senryuViewModel: CreateSenryuViewModel = hiltViewModel(),
-    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val navController = LocalNavController.current
 
@@ -64,7 +62,7 @@ fun CreateSenryuScreen(
         viewModel = senryuViewModel
     ) {
         navController.navigate("${NavItem.PostScreen.name}/${it.first}/${it.second}/${it.last}")
-        homeViewModel.postData(it.first, it.second, it.last)
+        senryuViewModel.postData(it.first, it.second, it.last)
     }
 }
 
