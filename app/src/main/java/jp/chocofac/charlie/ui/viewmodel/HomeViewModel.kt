@@ -71,6 +71,10 @@ class HomeViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(error = null)
     }
 
+    fun nowLocation(): LatLng {
+        return _nowLocationState.value.location.toLatLng()
+    }
+
     fun postData(first: String, second: String, third: String) {
         fireStore.postSenryuData(
             PostData(
