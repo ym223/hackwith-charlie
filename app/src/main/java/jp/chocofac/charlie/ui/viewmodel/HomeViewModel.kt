@@ -15,6 +15,7 @@ import jp.chocofac.charlie.data.model.PostData
 import jp.chocofac.charlie.data.model.toGeoPoint
 import jp.chocofac.charlie.data.model.toLatLng
 import jp.chocofac.charlie.data.service.location.FireStoreRepository
+import jp.chocofac.charlie.data.service.location.LocationRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
@@ -22,8 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val fusedLocationProviderClient: FusedLocationProviderClient,
-    private val fireStore: FireStoreRepository
+    private val locationRepository: LocationRepository,
+    private val fireStore: FireStoreRepository,
 ): ViewModel() {
     private val _nowLocationState = MutableStateFlow(NowLocationState())
     var nowLocationState = _nowLocationState.asStateFlow()
@@ -37,22 +38,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun startFetchLocation(context: Context) {
-        if (context.checkSelfPermission(
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && context.checkSelfPermission(
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(
-                context as Activity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                Param.REQUEST_CODE_LOCATION
-            )
-        } else {
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-                _nowLocationState.value = NowLocationState(location = it)
-            }
-        }
+        val location = locationRepository(context)
+        _nowLocationState.value = NowLocationState(location)
     }
 
     private fun startFetchCollection() {
