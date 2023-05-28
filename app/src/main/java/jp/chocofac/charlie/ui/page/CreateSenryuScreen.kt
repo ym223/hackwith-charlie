@@ -113,6 +113,7 @@ fun CreateSenryuContent(
                 Button(onClick = { viewModel.postImpressions(text) }) {
                     Text(text = "川柳を詠むのじゃ", fontFamily = fontFamily)
                 }
+                Spacer(modifier = Modifier.height(8.dp))
                 when (state.value) {
                     SenryuViewState.Initial -> {
                     }
@@ -130,7 +131,11 @@ fun CreateSenryuContent(
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(text = state.value.toString())
+                            val first = state.value.require().first
+                            val second = state.value.require().second
+                            val last = state.value.require().last
+                            Text(text = "$first\n$second\n$last", fontFamily = fontFamily)
+                            Spacer(modifier = Modifier.height(8.dp))
                             Button(onClick = { onSubmitButtonClick(state.value.require()) }) {
                                 Text(text = "投稿するのじゃ！", fontFamily = fontFamily)
                             }
