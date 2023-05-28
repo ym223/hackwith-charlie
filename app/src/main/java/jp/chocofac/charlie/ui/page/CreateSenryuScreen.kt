@@ -48,6 +48,7 @@ import jp.chocofac.charlie.LocalNavController
 import jp.chocofac.charlie.NavItem
 import jp.chocofac.charlie.R
 import jp.chocofac.charlie.data.service.senryu.Senryu
+import jp.chocofac.charlie.ui.fontFamily
 import jp.chocofac.charlie.ui.viewmodel.CreateSenryuViewModel
 import jp.chocofac.charlie.ui.viewmodel.HomeViewModel
 import jp.chocofac.charlie.ui.viewmodel.SenryuViewState
@@ -82,7 +83,7 @@ fun CreateSenryuContent(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(stringResource(id = R.string.app_name))
+                    Text(stringResource(id = R.string.app_name), fontFamily = fontFamily)
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -100,7 +101,7 @@ fun CreateSenryuContent(
             ) {
                 CameraPreview()
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "思ったことを書くのじゃ")
+                Text(text = "思ったことを書くのじゃ", fontFamily = fontFamily)
                 Spacer(modifier = Modifier.height(16.dp))
                 SenryuTextField(
                     value = text,
@@ -110,7 +111,7 @@ fun CreateSenryuContent(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = { viewModel.postImpressions(text) }) {
-                    Text(text = "川柳を詠むのじゃ")
+                    Text(text = "川柳を詠むのじゃ", fontFamily = fontFamily)
                 }
                 when (state.value) {
                     SenryuViewState.Initial -> {
@@ -131,7 +132,7 @@ fun CreateSenryuContent(
                         ) {
                             Text(text = state.value.toString())
                             Button(onClick = { onSubmitButtonClick(state.value.require()) }) {
-                                Text(text = "投稿するのじゃ！")
+                                Text(text = "投稿するのじゃ！", fontFamily = fontFamily)
                             }
                         }
                     }
