@@ -1,7 +1,5 @@
 package jp.chocofac.charlie.ui.page
 
-import android.graphics.Bitmap
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,8 +17,6 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -38,16 +34,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import jp.chocofac.charlie.R
 import jp.chocofac.charlie.ui.theme.CharlieTheme
 
 data class Senryu(val firstLine: String, val secondLine: String, val thirdLine: String) {
@@ -56,13 +48,12 @@ data class Senryu(val firstLine: String, val secondLine: String, val thirdLine: 
 @Composable
 fun RankingScreen() {
     Column {
-//        Text(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(32.dp),
-//            text = "ここにTabScreenを表示させたい人生でした"
-//        )
-        TabScreen()
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(32.dp),
+            text = "ここにTabScreenを表示させたい人生でした"
+        )
         RankingContent()
     }
 }
@@ -221,7 +212,7 @@ fun SenryuListItem(name: Senryu) {
 fun TabScreen() {
     var tabIndex by remember { mutableStateOf(0) }
 
-    val tabs = listOf("総合ランキング", "#未来大", "#函館山", "#グルメ", "#歴史", "#市電")
+    val tabs = listOf("Home", "About", "Settings", "More", "Something", "Everything")
 
     Column(modifier = Modifier.fillMaxWidth()) {
         ScrollableTabRow(selectedTabIndex = tabIndex) {
@@ -231,48 +222,24 @@ fun TabScreen() {
                     onClick = { tabIndex = index },
                     icon = {
                         when (index) {
-                            0 -> Image(
-                                painterResource(id = R.drawable.round_format_list_bulleted_24),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-                            )
-                            1 -> Image(
-                                painterResource(id = R.drawable.baseline_domain_24),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-                            )
-                            2 -> Image(
-                                painterResource(id = R.drawable.baseline_volcano_24),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-                            )
-                            3 -> Image(
-                                painterResource(id = R.drawable.outline_restaurant_24),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-                            )
-                            4 -> Image(
-                                painterResource(id = R.drawable.outline_history_edu_24),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-                            )
-                            5 -> Image(
-                                painterResource(id = R.drawable.baseline_train_24),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-                            )
+                            0 -> Icon(imageVector = Icons.Default.Home, contentDescription = null)
+                            1 -> Icon(imageVector = Icons.Default.Info, contentDescription = null)
+                            2 -> Icon(imageVector = Icons.Default.Settings, contentDescription = null)
+                            3 -> Icon(imageVector = Icons.Default.Lock, contentDescription = null)
+                            4 -> Icon(imageVector = Icons.Default.Phone, contentDescription = null)
+                            5 -> Icon(imageVector = Icons.Default.Star, contentDescription = null)
                         }
                     }
                 )
             }
         }
         when (tabIndex) {
-            0 -> RankingContent()
-            1 -> RankingContent()
-            2 -> RankingContent()
-            3 -> RankingContent()
-            4 -> RankingContent()
-            5 -> RankingContent()
+            0 -> RankingScreen()
+            1 -> HomeScreen()
+            2 -> HomeScreen()
+            3 -> HomeScreen()
+            4 -> HomeScreen()
+            5 -> HomeScreen()
         }
     }
 }
