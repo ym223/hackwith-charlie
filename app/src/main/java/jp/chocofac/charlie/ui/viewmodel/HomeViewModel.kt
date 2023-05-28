@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.chocofac.charlie.data.model.LikesData
 import jp.chocofac.charlie.data.model.Param
 import jp.chocofac.charlie.data.model.PostData
 import jp.chocofac.charlie.data.model.toGeoPoint
@@ -32,6 +33,9 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UiState<PostData>())
     var uiState = _uiState.asStateFlow()
 
+    private val _likeState = MutableStateFlow(LikeState<LikesData>())
+    var likeState = _likeState.asStateFlow()
+
     fun startFetch(context: Context) {
         startFetchCollection()
         startFetchLocation(context)
@@ -52,6 +56,28 @@ class HomeViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(loading = false, error = it)
             }
         )
+    }
+
+    fun startFetchLike(path: String) {
+        _likeState.value = _likeState.value.copy(loading = true)
+        fireStore.listenLikes(
+            path = path,
+            onSuccess = {
+                _likeState.value = _likeState.value.copy(loading = false, data = it)
+            },
+            onFailure = {
+                _likeState.value = _likeState.value.copy(loading = false, error = it)
+            }
+        )
+    }
+
+    fun onLikeButton(path: String) {
+        val isContain = _likeState.value.data?.let { fireStore.isLikeContain(it) }
+        if (isContain == true) {
+            fireStore.postLike(path)
+        } else {
+            fireStore.postUnLike(path)
+        }
     }
     
     fun onDismissRequest() {
@@ -88,5 +114,11 @@ data class NowLocationState(
 data class UiState<T>(
     val loading: Boolean = false,
     val data: List<T> = emptyList(),
+    val error: Exception? = null
+)
+
+data class LikeState<T>(
+    val loading: Boolean = false,
+    val data: T? = null,
     val error: Exception? = null
 )
