@@ -30,14 +30,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
-import jp.chocofac.charlie.data.service.senryu.Senryu
 import jp.chocofac.charlie.ui.page.CreateSenryuScreen
 import jp.chocofac.charlie.ui.page.HomeScreen
 import jp.chocofac.charlie.ui.page.LoginScreen
 import jp.chocofac.charlie.ui.page.PostedSenryuScreen
-import jp.chocofac.charlie.ui.page.RankingScreen
+import jp.chocofac.charlie.ui.page.ranking.RankingScreen
 import jp.chocofac.charlie.ui.theme.CharlieTheme
-import timber.log.Timber
 
 val LocalNavController = staticCompositionLocalOf<NavHostController> {
     error("No Current NavController")
