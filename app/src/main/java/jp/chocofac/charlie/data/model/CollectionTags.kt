@@ -4,4 +4,5 @@ sealed class CollectionTags(
     val name: String
 ) {
     object Posts: CollectionTags("posts")
+    object Likes: CollectionTags("likes")
 }
