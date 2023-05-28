@@ -259,8 +259,8 @@ fun TabScreen() {
         when (tabIndex) {
             0 -> RankingContent()
             1 -> FunRankingScreen()
-            2 -> RankingContent()
-            3 -> RankingContent()
+            2 -> MtHakodateRankingScreen()
+            3 -> GourmetRankingScreen()
             4 -> RankingContent()
             5 -> RankingContent()
         }

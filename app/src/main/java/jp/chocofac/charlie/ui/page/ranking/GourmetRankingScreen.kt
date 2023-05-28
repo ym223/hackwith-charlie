@@ -3,15 +3,15 @@ package jp.chocofac.charlie.ui.page.ranking
 import androidx.compose.runtime.Composable
 
 @Composable
-fun FunRankingScreen() {
-    FunRankingContent()
+fun GourmetRankingScreen() {
+    GourmetRankingContent()
 }
 
 @Composable
-fun FunRankingContent() {
-    val mockSenryu1 = Senryu("未来の夢", "広がる世界を", "手に取りたい")
-    val mockSenryu2 = Senryu("未来を見る", "ガラス張りの恐怖", "胸がざわめく")
-    val mockSenryu3 = Senryu("未来の夜", "美しく輝く", "感動の景色")
+fun GourmetRankingContent() {
+    val mockSenryu1 = Senryu("イカ丼", "まじうまかった", "幸せ満開")
+    val mockSenryu2 = Senryu("海より濃い", "醤油や味噌じゃ", "なく塩ラーメン")
+    val mockSenryu3 = Senryu("ラッキーピエロ", "何食えばいい", "悩み多し")
     val names = listOf(
         Senryu(mockSenryu1.firstLine, mockSenryu1.secondLine, mockSenryu1.thirdLine),
         Senryu(mockSenryu2.firstLine, mockSenryu2.secondLine, mockSenryu2.thirdLine),
