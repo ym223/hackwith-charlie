@@ -71,12 +71,12 @@ class HomeViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(error = null)
     }
 
-    fun postData(text: String = "") {
+    fun postData(first: String, second: String, third: String) {
         fireStore.postSenryuData(
             PostData(
-                "first",
-                "second",
-                "third",
+                first = first,
+                second = second,
+                third = third,
                 contributor = "contributor",
                 geoPoint = nowLocationState.value.location.toGeoPoint()
             ),
