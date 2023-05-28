@@ -262,7 +262,7 @@ fun TabScreen() {
             2 -> MtHakodateRankingScreen()
             3 -> GourmetRankingScreen()
             4 -> HistoryRankingScreen()
-            5 -> RankingContent()
+            5 -> TrainRankingScreen()
         }
     }
 }
